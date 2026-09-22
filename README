@@ -1,1 +1,19 @@
+# 🚀 CUDA GEMM (General Matrix Multiplication) Optimization
+
+GEMM 是深度學習、高效能計算（HPC）與電腦圖學中最核心、最耗時的運算之一。本專案逐步實現並優化 CUDA GEMM 核心，探討各種效能瓶頸（如 Global Memory 頻寬限制、Bank Conflict 與計算單元利用率），並展示不同優化層級帶來的效能飛躍。
+## ⚙️ 核心優化策略
+
+1. **Naive GEMM (基準版本)**
+   - 每個執行緒（Thread）負責計算輸出矩陣中的一個元素。
+   - 缺點：頻繁存取 Global Memory，缺乏快取機制，效能極低。
+
+2. **Shared Memory Tiling (共享記憶體分塊)**
+   - 利用高速的 Shared Memory（SMEM）快取資料，減少對 Global Memory 的重複讀取。
+   - 透過 Cooperative Loading（協同載入）大幅降低記憶體延遲。
+
+3. **Thread Tiling (執行緒分塊 / 暫存器最佳化)**
+   - 讓每個執行緒負責計算多個輸出元素（如 4x4 或 8x8 區塊），進一步提高運算與記憶體存取比例（Arithmetic Intensity）。
+
+4. **Vectorized Memory Access (向量化記憶體存取)**
+   - 使用 `float4` 向量型態進行全域記憶體載入與儲存，大幅增加記憶體頻寬利用率。
 
